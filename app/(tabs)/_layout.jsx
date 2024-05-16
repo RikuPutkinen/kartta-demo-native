@@ -8,6 +8,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Map',
+          header: () => null,
           tabBarIcon: ({ color }) => (
             <FontAwesome size={28} name="map" color={color} />
           ),
