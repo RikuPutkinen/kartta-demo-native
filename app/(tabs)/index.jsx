@@ -1,7 +1,8 @@
 import { View, StyleSheet } from 'react-native'
-import MapView, { Marker } from 'react-native-maps'
+import MapView from 'react-native-maps'
 
 import { useGetAllLocationsQuery } from '../../services/locations'
+import MapMarker from '../../components/mapMarker'
 
 const styles = StyleSheet.create({
   container: {
@@ -28,24 +29,9 @@ export default function Tab() {
   return (
     <View style={styles.container}>
       <MapView style={styles.map}>
-        {locations.map(l => {
-          const { id, name, description, location } = l
-          console.log(l)
-
-          const latLng = {
-            latitude: location.coordinates[1],
-            longitude: location.coordinates[0],
-          }
-
-          return (
-            <Marker
-              key={id}
-              title={name}
-              description={description}
-              coordinate={latLng}
-            />
-          )
-        })}
+        {locations.map(l => (
+          <MapMarker locationObj={l} key={l.id} />
+        ))}
       </MapView>
     </View>
   )
