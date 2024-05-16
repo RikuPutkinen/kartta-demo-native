@@ -10,11 +10,11 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: 'center',
-    color: 'red',
+    color: 'blue',
   },
 })
 
-export default function MapMarker({ locationObj }) {
+export default function MapMarker({ locationObj, showTitle }) {
   const { name, location } = locationObj
   console.log(locationObj)
 
@@ -30,7 +30,7 @@ export default function MapMarker({ locationObj }) {
           source={require('../assets/marker-251.png')}
           style={styles.image}
         />
-        <Text style={styles.text}>{name}</Text>
+        {showTitle && <Text style={styles.text}>{name}</Text>}
       </View>
     </Marker>
   )

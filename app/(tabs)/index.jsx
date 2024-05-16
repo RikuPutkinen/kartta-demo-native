@@ -1,4 +1,5 @@
 import { View, StyleSheet } from 'react-native'
+import { useState } from 'react'
 import MapView from 'react-native-maps'
 
 import { useGetAllLocationsQuery } from '../../services/locations'
@@ -16,6 +17,7 @@ const styles = StyleSheet.create({
 
 export default function Tab() {
   const { data, error, isLoading } = useGetAllLocationsQuery()
+  const [showTitle, setShowTitle] = useState(false)
   let locations = []
 
   if (error) {
@@ -26,11 +28,21 @@ export default function Tab() {
     locations = data
   }
 
+  function handleRegionChangeComplete(e) {
+    console.log(e)
+    const zoomLevel = Math.log2(360 / e.longitudeDelta)
+    console.log(zoomLevel)
+    setShowTitle(zoomLevel > 12)
+  }
+
   return (
     <View style={styles.container}>
-      <MapView style={styles.map}>
+      <MapView
+        style={styles.map}
+        onRegionChangeComplete={handleRegionChangeComplete}
+      >
         {locations.map(l => (
-          <MapMarker locationObj={l} key={l.id} />
+          <MapMarker locationObj={l} showTitle={showTitle} key={l.id} />
         ))}
       </MapView>
     </View>
