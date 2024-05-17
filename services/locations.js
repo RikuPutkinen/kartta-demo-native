@@ -13,17 +13,3 @@ export const locationApi = createApi({
 })
 
 export const { useGetAllLocationsQuery } = locationApi
-
-/*
-import axios from 'axios'
-
-
-async function getAll() {
-  const res = await axios.get(baseUrl)
-  return res.data
-}
-
-export default {
-  getAll,
-}
-*/
