@@ -14,9 +14,13 @@ const styles = StyleSheet.create({
   },
 })
 
-export default function MapMarker({ locationObj, showTitle }) {
+export default function MapMarker({
+  locationObj,
+  showTitle,
+  onSelect,
+  onDeselect,
+}) {
   const { name, location } = locationObj
-  console.log(locationObj)
 
   const latLng = {
     latitude: location.coordinates[1],
@@ -24,7 +28,7 @@ export default function MapMarker({ locationObj, showTitle }) {
   }
 
   return (
-    <Marker coordinate={latLng}>
+    <Marker coordinate={latLng} onSelect={onSelect} onDeselect={onDeselect}>
       <View style={styles.container}>
         <Image
           source={require('../assets/marker-251.png')}
