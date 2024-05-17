@@ -4,6 +4,7 @@ import MapView from 'react-native-maps'
 
 import { useGetAllLocationsQuery } from '../../services/locations'
 import MapMarker from '../../components/mapMarker'
+import LocationBottonSheet from '../../components/locationBottomSheet'
 
 const styles = StyleSheet.create({
   container: {
@@ -18,6 +19,8 @@ const styles = StyleSheet.create({
 export default function Tab() {
   const { data, error, isLoading } = useGetAllLocationsQuery()
   const [showTitle, setShowTitle] = useState(false)
+  const [selectedLocation, setSelectedLocation] = useState(null)
+
   let locations = []
 
   if (error) {
@@ -28,10 +31,26 @@ export default function Tab() {
     locations = data
   }
 
+  console.log('SELECTED LOCATION', selectedLocation)
+
+  function handleMarkerDeselect() {
+    setSelectedLocation(null)
+    console.log('MARKER DESELECT')
+  }
+
+  function handleMarkerSelect(l) {
+    setSelectedLocation(l)
+    console.log('MARKER SELECT', l)
+  }
+
+  function handleBottomSheetClose() {
+    console.log('BOTTOM SHEET CLOSED')
+    setSelectedLocation(null)
+  }
+
   function handleRegionChangeComplete(e) {
-    console.log(e)
     const zoomLevel = Math.log2(360 / e.longitudeDelta)
-    console.log(zoomLevel)
+    console.log('ZOOM LEVEL:', zoomLevel)
     setShowTitle(zoomLevel > 12)
   }
 
@@ -42,9 +61,21 @@ export default function Tab() {
         onRegionChangeComplete={handleRegionChangeComplete}
       >
         {locations.map(l => (
-          <MapMarker locationObj={l} showTitle={showTitle} key={l.id} />
+          <MapMarker
+            locationObj={l}
+            showTitle={showTitle}
+            key={l.id}
+            onSelect={() => handleMarkerSelect(l)}
+            onDeselect={() => handleMarkerDeselect()}
+          />
         ))}
       </MapView>
+      {selectedLocation && (
+        <LocationBottonSheet
+          locationObj={selectedLocation}
+          onClose={handleBottomSheetClose}
+        />
+      )}
     </View>
   )
 }
